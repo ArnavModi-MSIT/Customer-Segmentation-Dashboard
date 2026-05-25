@@ -131,39 +131,6 @@ python exploratory_data_analysis.py
 
 ---
 
-## 📁 Project Structure
-
-```
-E-Commerce/
-├── index.html                           # Web dashboard (landing page)
-├── style.css                            # Dashboard styling
-├── analytics.pbix                       # Power BI interactive dashboard
-│
-├── Python Analysis Scripts/
-│   ├── import_data_to_postgresql.py     # Database setup & data import
-│   ├── churn_data.py                    # Churn data preparation
-│   ├── churn_db.py                      # Database operations
-│   ├── churn_ml.py                      # ML models (training & evaluation)
-│   ├── rfm_analysis_and_segmentation.py # RFM analysis & customer segments
-│   ├── business_insights_roi.py         # ROI & business metrics
-│   └── exploratory_data_analysis.py     # EDA & data exploration
-│
-├── Data Files/
-│   ├── data/                            # Raw & processed datasets
-│   ├── customer_churn_predictions.csv   # ML predictions output
-│   ├── customer_churn_features.csv      # Feature engineering output
-│   ├── rfm_analysis_results.csv         # RFM segment results
-│   └── segment_summary.csv              # Segment summary statistics
-│
-├── Configuration/
-│   ├── requirements.txt                 # Python dependencies
-│   ├── .gitignore                       # Git ignore rules
-│   ├── README.md                        # This file
-│   └── olist-project.session.sql        # SQL reference queries
-```
-
----
-
 ## 🔍 Key Results & Insights
 
 ### Customer Segments
@@ -284,27 +251,9 @@ CSV files are automatically generated in the project root:
 
 ---
 
-## 🤝 Contributing
-
-Contributions are welcome! To contribute:
-
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit changes (`git commit -m 'Add AmazingFeature'`)
-4. Push to branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
-
-### Guidelines
-- Follow PEP 8 style guide for Python code
-- Add comments for complex logic
-- Update tests and documentation
-- Ensure code is reproducible
-
----
-
 ## 📝 License
 
-This project is licensed under the **MIT License** - see [LICENSE](LICENSE) file for details.
+This project is licensed under the **MIT License**
 
 ---
 
@@ -313,38 +262,3 @@ This project is licensed under the **MIT License** - see [LICENSE](LICENSE) file
 **Arnav Modi**
 - GitHub: [@ArnavModi-MSIT](https://github.com/ArnavModi-MSIT)
 - Project: [Customer Segmentation Dashboard](https://arnavmodi-msit.github.io/Customer-Segmentation-Dashboard/)
-
----
-
-## 🙏 Acknowledgments
-
-- **Olist Dataset**: Public Brazilian E-Commerce dataset
-- **Community**: Built with Python, PostgreSQL, and open-source tools
-- **Inspiration**: Customer analytics best practices and industry standards
-
----
-
-## 📖 Further Reading
-
-- [RFM Analysis Guide](https://en.wikipedia.org/wiki/RFM_(customer_value))
-- [Churn Prediction Best Practices](https://blog.altexsoft.com/churn-prediction/)
-- [Power BI Documentation](https://docs.microsoft.com/en-us/power-bi/)
-- [PostgreSQL Documentation](https://www.postgresql.org/docs/)
-
----
-
-## 🐛 Known Issues & Future Enhancements
-
-### Known Issues
-- None currently reported
-
-### Future Enhancements
-- [ ] Real-time data streaming
-- [ ] Automated model retraining
-- [ ] API endpoints for predictions
-- [ ] Mobile-responsive Power BI
-- [ ] Advanced visualization library integration
-
----
-
-**Last Updated**: May 2024 | **Status**: Active & Maintained
