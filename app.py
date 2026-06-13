@@ -10,6 +10,12 @@ api_key = os.getenv("GEMINI_API_KEY")
 
 client_ai = genai.Client(api_key=api_key)
 
+st.set_page_config(
+    page_title="Customer Insights Assistant",
+    layout="wide",
+    initial_sidebar_state="collapsed"
+)
+
 client_db = chromadb.PersistentClient(path="./chroma_db")
 collection = client_db.get_collection("customer_insights")
 
