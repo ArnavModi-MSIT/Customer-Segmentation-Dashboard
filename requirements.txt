@@ -16,3 +16,10 @@ seaborn>=0.12.0
 
 # Utilities
 python-dotenv>=0.21.0
+
+
+streamlit
+chromadb
+google-genai
+python-dotenv
+pandas

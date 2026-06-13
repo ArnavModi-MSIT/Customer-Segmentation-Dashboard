@@ -1,0 +1,12 @@
+Customer Churn Risk Report
+
+Total Customers: 99441
+
+High Risk (>=0.7): 7178
+Medium Risk (0.4-0.7): 75224
+Low Risk (<0.4): 17039
+
+Average Churn Probability: 0.52
+
+Business Impact:
+High-risk customers should be prioritized for retention campaigns and targeted offers.

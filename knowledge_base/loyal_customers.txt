@@ -1,0 +1,20 @@
+Segment Name: Loyal Customers
+
+Customer Count: 7685
+Revenue Share: 8.8%
+Percentage of Customers: 8.0%
+
+Average Monetary Value: ₹176.42
+Average Purchase Frequency: 1.11
+Average Recency: 92.6 days
+Average RFM Score: 3.9
+
+Business Insight:
+The Loyal Customers segment contributes 8.8% of total revenue
+and represents 8.0% of all customers.
+
+Recommended Actions:
+
+- Upsell premium products
+- Referral programs
+- Personalized recommendations

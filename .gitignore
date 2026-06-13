@@ -77,3 +77,5 @@ olist-project.session.sql
 Thumbs.db
 *.lnk
 
+.env
+chroma_db/
