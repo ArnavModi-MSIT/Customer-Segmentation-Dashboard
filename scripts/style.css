@@ -455,16 +455,6 @@ section {
   gap: 30px;
 }
 
-.rag-section {
-    padding: 60px 20px;
-    background: #f9f9f9;
-}
-
-.rag-container {
-    max-width: 1200px;
-    margin: 0 auto;
-}
-
 .method-card {
   background: rgba(255, 255, 255, 0.95);
   border: 2px solid var(--border);

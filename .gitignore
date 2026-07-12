@@ -79,3 +79,6 @@ Thumbs.db
 
 .env
 chroma_db/
+
+# ===== OUTPUT FILES (Generated) =====
+!outputs/*.csv

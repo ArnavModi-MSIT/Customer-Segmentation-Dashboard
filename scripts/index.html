@@ -5,20 +5,20 @@
 
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  
+
   <!-- SEO Meta Tags -->
-  <meta name="description" content="Professional customer segmentation and churn analysis dashboard built on Olist Brazilian E-Commerce Dataset. Features RFM analysis, ML predictions, and interactive Power BI visualizations." />
-  <meta name="keywords" content="customer segmentation, RFM analysis, churn prediction, data analytics, machine learning, Power BI" />
+  <meta name="description" content="Customer segmentation and churn risk analysis on the Olist Brazilian E-Commerce Dataset. RFM segmentation, XGBoost churn scoring, and an interactive Power BI dashboard, built on PostgreSQL." />
+  <meta name="keywords" content="customer segmentation, RFM analysis, churn prediction, data analytics, Power BI, PostgreSQL" />
   <meta name="author" content="Arnav Modi" />
   <meta name="theme-color" content="#ff6b35" />
-  
+
   <!-- Open Graph Tags -->
   <meta property="og:title" content="Customer Segmentation Dashboard" />
-  <meta property="og:description" content="End-to-end customer analytics platform with RFM segmentation and ML churn prediction" />
+  <meta property="og:description" content="RFM customer segmentation and churn risk scoring platform built on PostgreSQL and Power BI" />
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://arnavmodi-msit.github.io/Customer-Segmentation-Dashboard/" />
 
-  <title>Customer Segmentation Dashboard | RFM Analysis & Churn Prediction</title>
+  <title>Customer Segmentation Dashboard | RFM Analysis & Churn Risk Scoring</title>
 
   <!-- GOOGLE FONT -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -44,13 +44,6 @@
         <li><a href="#insights" class="nav-link">Insights</a></li>
         <li><a href="#dashboard" class="nav-link">Dashboard</a></li>
         <li><a href="https://github.com/ArnavModi-MSIT/-Customer-Segmentation-Dashboard-" target="_blank" class="nav-link">GitHub</a></li>
-        <li>
-    <a href="https://darkthanos-customer-insights-assistant.hf.space"
-       target="_blank"
-       class="nav-link">
-       AI Assistant
-    </a>
-</li>
       </ul>
     </div>
   </nav>
@@ -63,17 +56,18 @@
     <div class="hero-content">
 
       <span class="badge">
-        Data Analytics • RFM Segmentation • Machine Learning
+        Data Analytics • RFM Segmentation • Churn Risk Scoring
       </span>
 
       <h1>
-        Customer Segmentation & Churn Analysis
+        Customer Segmentation & Churn Risk Analysis
       </h1>
 
       <p>
-        Professional end-to-end analytics platform featuring RFM segmentation, 
-        ML-based churn prediction, and interactive Power BI dashboards. 
-        Built on 99K+ customers from Olist Brazilian E-Commerce Dataset.
+        An end-to-end analytics pipeline on PostgreSQL: RFM segmentation and
+        XGBoost-based churn risk scoring across 96K+ customers from the
+        Olist Brazilian E-Commerce Dataset, visualized in an interactive
+        Power BI dashboard.
       </p>
 
       <div class="hero-buttons">
@@ -100,23 +94,23 @@
   <section class="metrics">
 
     <div class="metric-card">
-      <div class="metric-value">99K+</div>
-      <p>Total Customers</p>
+      <div class="metric-value">96K+</div>
+      <p>Customers Analyzed</p>
     </div>
 
     <div class="metric-card">
-      <div class="metric-value">12K</div>
+      <div class="metric-value">6.5K</div>
       <p>Champion Customers</p>
     </div>
 
     <div class="metric-card">
-      <div class="metric-value">48%</div>
-      <p>Revenue Concentration</p>
+      <div class="metric-value">13.15%</div>
+      <p>Revenue from Champions</p>
     </div>
 
     <div class="metric-card">
-      <div class="metric-value">85%</div>
-      <p>Prediction Accuracy</p>
+      <div class="metric-value">0.65</div>
+      <p>Churn Model ROC-AUC</p>
     </div>
 
   </section>
@@ -130,11 +124,13 @@
       <h2>🎯 Project Overview</h2>
 
       <p>
-        This comprehensive project analyzes customer purchasing behavior using 
-        Recency, Frequency, and Monetary (RFM) analysis combined with advanced 
-        machine learning for churn prediction. Customers are segmented into 
-        actionable groups enabling targeted retention, engagement, and 
-        revenue optimization strategies.
+        This project analyzes customer purchasing behavior using Recency,
+        Frequency, and Monetary (RFM) analysis, combined with an XGBoost
+        churn-risk model. Customers are segmented into seven groups to
+        support targeted retention and engagement strategies. All metrics
+        are computed on the true customer identity (<code>customer_unique_id</code>),
+        not the per-order key the raw dataset exposes by default &mdash; a
+        distinction that materially changes every downstream number.
       </p>
 
       <div class="segments-list">
@@ -142,10 +138,11 @@
         <ul>
           <li><strong>Champions:</strong> Best customers, highest value</li>
           <li><strong>Loyal Customers:</strong> Consistent purchasers</li>
-          <li><strong>Potential Loyalists:</strong> High conversion potential</li>
-          <li><strong>Need Attention:</strong> Largest engagement opportunity</li>
-          <li><strong>At Risk:</strong> Likely to churn soon</li>
-          <li><strong>Lost Customers:</strong> Inactive for extended period</li>
+          <li><strong>Potential Loyalist:</strong> High conversion potential</li>
+          <li><strong>Need Attention:</strong> Largest segment by size</li>
+          <li><strong>At Risk:</strong> Elevated churn risk</li>
+          <li><strong>New Customers:</strong> Recent, low frequency</li>
+          <li><strong>Lost:</strong> Inactive for an extended period</li>
         </ul>
       </div>
 
@@ -156,27 +153,25 @@
       <h2>🛠 Tech Stack</h2>
 
       <p>
-        Enterprise-grade technology stack designed for scalability, 
-        performance, and maintainability with industry best practices.
+        A Python-orchestrated pipeline reading and writing PostgreSQL,
+        with all business metrics served through Power BI.
       </p>
 
       <div class="tech-grid">
 
-        <span class="tech-badge">Python 3.8+</span>
+        <span class="tech-badge">Python</span>
         <span class="tech-badge">Pandas</span>
         <span class="tech-badge">Scikit-learn</span>
         <span class="tech-badge">XGBoost</span>
         <span class="tech-badge">PostgreSQL</span>
         <span class="tech-badge">SQL</span>
+        <span class="tech-badge">SQLAlchemy</span>
         <span class="tech-badge">Power BI</span>
-        <span class="tech-badge">NumPy</span>
-        <span class="tech-badge">Matplotlib</span>
-        <span class="tech-badge">HTML/CSS</span>
 
       </div>
 
       <p style="margin-top: 20px; font-size: 14px; color: #666;">
-        <strong>Dataset:</strong> Olist Brazilian E-Commerce (100K+ orders, 32K+ products, 99K+ customers)
+        <strong>Dataset:</strong> Olist Brazilian E-Commerce (99K+ orders, 96K+ unique customers, 33K+ products)
       </p>
 
     </div>
@@ -201,11 +196,13 @@
 
         <div class="icon">📈</div>
 
-        <h3>Revenue Optimization</h3>
+        <h3>Revenue Concentration</h3>
 
         <p>
-          Top 12% of customers (Champions) generate 48% of revenue. 
-          Targeted retention programs for this segment yield highest ROI.
+          Champions (7% of customers) generate 13.15% of revenue &mdash;
+          a real but modest concentration, not the inflated 80/20-style
+          split a naive analysis can produce when customer identity is
+          computed incorrectly.
         </p>
 
       </div>
@@ -214,11 +211,13 @@
 
         <div class="icon">🎯</div>
 
-        <h3>Segmentation Strategy</h3>
+        <h3>Segmentation Reality Check</h3>
 
         <p>
-          25% of customers need attention representing largest reactivation 
-          opportunity. Customized engagement campaigns unlock significant growth potential.
+          "Need Attention" is the largest segment at ~40% of customers &mdash;
+          a direct consequence of a 3.12% repeat-purchase rate in this
+          dataset. Most customers are one-time buyers, which shapes every
+          retention strategy built on top of this data.
         </p>
 
       </div>
@@ -227,24 +226,27 @@
 
         <div class="icon">🔮</div>
 
-        <h3>Churn Prediction</h3>
+        <h3>Churn Risk Scoring</h3>
 
         <p>
-          ML models identify at-risk customers with 85%+ accuracy. 
-          Proactive intervention campaigns prevent revenue leakage before it occurs.
+          An XGBoost model scores churn risk (ROC-AUC 0.65) using payment,
+          delivery, and review-score behavior. Given how few customers
+          repeat-purchase, this is honestly reported as a modest-but-real
+          signal rather than an inflated accuracy figure.
         </p>
 
       </div>
 
       <div class="insight-card">
 
-        <div class="icon">💰</div>
+        <div class="icon">⭐</div>
 
-        <h3>Loyalty Programs</h3>
+        <h3>Service Quality &amp; Risk</h3>
 
         <p>
-          Potential Loyalists represent 18% of customer base. 
-          Conversion programs from this segment create sustainable revenue growth.
+          Low-risk customers rate their experience 1.23x higher than
+          high-risk customers on average &mdash; review score is the
+          strongest single signal in the churn model.
         </p>
 
       </div>
@@ -253,24 +255,26 @@
 
         <div class="icon">📊</div>
 
-        <h3>Data-Driven Decisions</h3>
+        <h3>Data-Driven Segmentation</h3>
 
         <p>
-          RFM scoring provides quantifiable metrics for customer valuation. 
-          Evidence-based segmentation replaces guesswork with actionable intelligence.
+          RFM scoring on the correct customer identity provides a
+          quantifiable, reproducible basis for customer valuation,
+          replacing per-order artifacts with genuine customer-level metrics.
         </p>
 
       </div>
 
       <div class="insight-card">
 
-        <div class="icon">🚀</div>
+        <div class="icon">💰</div>
 
-        <h3>Performance Metrics</h3>
+        <h3>Retention ROI</h3>
 
         <p>
-          Monitor customer lifetime value, retention rates, and segment performance 
-          in real-time through interactive dashboards and automated reporting.
+          Recovering just 10% of high-risk revenue (R$1.03M at risk)
+          would add roughly R$103K &mdash; modeled directly in the
+          dashboard's retention scenarios.
         </p>
 
       </div>
@@ -295,38 +299,38 @@
 
       <div class="method-card">
         <div class="method-number">01</div>
-        <h3>Data Integration</h3>
-        <p>Raw data imported from Olist dataset into PostgreSQL with comprehensive data cleaning and validation.</p>
+        <h3>Ingestion</h3>
+        <p>Raw Olist CSVs loaded into PostgreSQL, with product category nulls cleaned and English category names joined in.</p>
       </div>
 
       <div class="method-card">
         <div class="method-number">02</div>
-        <h3>Feature Engineering</h3>
-        <p>RFM scores calculated with domain expertise. 25+ features engineered for ML models including time-series trends.</p>
+        <h3>EDA</h3>
+        <p>Revenue, order, customer, and review metrics computed on order-level (not item-level) aggregates for correctness.</p>
       </div>
 
       <div class="method-card">
         <div class="method-number">03</div>
-        <h3>Model Training</h3>
-        <p>Ensemble ML models (Random Forest, XGBoost) trained with cross-validation, hyperparameter tuning, and evaluation.</p>
+        <h3>RFM Segmentation</h3>
+        <p>Recency, Frequency, and Monetary scores computed on true customer identity, mapping customers to 7 segments.</p>
       </div>
 
       <div class="method-card">
         <div class="method-number">04</div>
-        <h3>Segmentation</h3>
-        <p>Customers mapped to 6 segments with business rules ensuring practical, actionable classifications for operations.</p>
+        <h3>Churn Feature Engineering</h3>
+        <p>Payment, delivery, and review-based features aggregated per customer, avoiding merge fan-out across multi-item, multi-payment orders.</p>
       </div>
 
       <div class="method-card">
         <div class="method-number">05</div>
-        <h3>Visualization</h3>
-        <p>Interactive Power BI dashboards and web interface enable stakeholders to explore insights and trends dynamically.</p>
+        <h3>Churn Modeling</h3>
+        <p>XGBoost classifier trained on customer-level features, evaluated by ROC-AUC rather than accuracy alone given class imbalance.</p>
       </div>
 
       <div class="method-card">
         <div class="method-number">06</div>
-        <h3>Deployment</h3>
-        <p>Production-ready Python pipeline with scheduling capability for automated monthly analysis and predictions.</p>
+        <h3>Visualization</h3>
+        <p>All results written back to PostgreSQL and served through an interactive Power BI dashboard across 3 pages.</p>
       </div>
 
     </div>
@@ -346,44 +350,23 @@
     </div>
 
     <p style="text-align: center; color: #666; margin-bottom: 30px;">
-      Explore comprehensive customer segmentation, churn analysis, and business metrics in real-time
+      Explore customer segmentation, churn risk, and retention economics across 3 dashboard pages
     </p>
 
     <div class="dashboard-container">
 
       <iframe
-        title="Customer Segmentation Dashboard"
-        width="100%"
-        height="750"
-        src="https://app.powerbi.com/view?r=eyJrIjoiYTcwMGYxZDItM2NlYy00Njg0LTk0MGItY2RmNTNiNGU4NTQ1IiwidCI6IjNiMjk5M2Q3LTQ5YmYtNGYyOS1iNzk0LWRkNTcyN2Y0NWVlMiJ9&pageName=e3f90fc9e1e7c9c990ca"
-        frameborder="0"
-        allowFullScreen="true">
-      </iframe>
+      title="Customer Segmentation Dashboard"
+      width="100%"
+      height="750"
+      src="https://app.powerbi.com/view?r=eyJrIjoiYTcwMGYxZDItM2NlYy00Njg0LTk0MGItY2RmNTNiNGU4NTQ1IiwidCI6IjNiMjk5M2Q3LTQ5YmYtNGYyOS1iNzk0LWRkNTcyN2Y0NWVlMiJ9"
+      frameborder="0"
+      allowFullScreen="true">
+    </iframe>
 
     </div>
 
   </section>
-
-  <section class="rag-section" id="ai-assistant">
-    <div class="section-title">
-        <span>AI Assistant</span>
-        <h2>Customer Insights Assistant</h2>
-    </div>
-    
-    <p style="text-align: center; color: #666; margin-bottom: 30px;">
-        Ask questions about customer segments, churn risk, and retention strategies
-    </p>
-    
-    <div class="rag-container">
-        <iframe
-            src="https://darkthanos-customer-insights-assistant.hf.space?embed=true&theme=light"
-                width="100%"
-            height="800"
-            frameborder="0"
-            style="border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
-        </iframe>
-    </div>
-</section>
 
   <!-- CTA SECTION -->
 
@@ -421,7 +404,7 @@
 
       <div class="footer-section">
         <h3>Customer Segmentation Dashboard</h3>
-        <p>Professional data analytics and customer intelligence platform.</p>
+        <p>Customer analytics platform: RFM segmentation and churn risk scoring on PostgreSQL and Power BI.</p>
       </div>
 
       <div class="footer-section">

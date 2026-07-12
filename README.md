@@ -1,264 +1,84 @@
-# 📊 Customer Segmentation & Churn Analysis Dashboard
+# Customer Segmentation & Churn Risk Analysis
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Python 3.8+](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/)
-[![PostgreSQL](https://img.shields.io/badge/PostgreSQL-13+-336791.svg)](https://www.postgresql.org/)
+End-to-end analytics pipeline on the [Olist Brazilian E-Commerce Dataset](https://www.kaggle.com/datasets/olistbr/brazilian-ecommerce): RFM customer segmentation and XGBoost-based churn risk scoring, orchestrated in Python, stored in PostgreSQL, and visualized in Power BI.
 
-A comprehensive **end-to-end customer analytics platform** featuring RFM segmentation, machine learning-based churn prediction, and interactive business intelligence dashboards. Built on the **Olist Brazilian E-Commerce Dataset** with 99K+ customers.
-
-🔗 **[Live Dashboard](https://arnavmodi-msit.github.io/Customer-Segmentation-Dashboard/#dashboard)** | 📁 **[GitHub Repo](https://github.com/ArnavModi-MSIT/-Customer-Segmentation-Dashboard-)**
+**[Live Dashboard](#)** · **[Power BI Report](#)**
 
 ---
 
-## 🎯 Project Objectives
+## Overview
 
-- **Segment customers** using RFM (Recency, Frequency, Monetary) analysis into 6 actionable groups
-- **Predict customer churn** using machine learning models (Logistic Regression, Random Forest, Gradient Boosting)
-- **Identify high-value customers** for targeted retention campaigns
-- **Calculate ROI metrics** for business decision-making
-- **Visualize insights** through interactive Power BI dashboards and web interface
+- **96,096** unique customers analyzed (99,441 orders)
+- **7-segment RFM model** (Champions, Loyal, Potential Loyalist, At Risk, Need Attention, New, Lost)
+- **XGBoost churn risk model** — ROC-AUC 0.65
+- **3-page Power BI dashboard**, fully driven by PostgreSQL, no manual CSV wiring
 
----
+## Key Findings
 
-## ✨ Key Features
+| Metric | Value |
+|---|---|
+| Champions revenue share | 13.15% (of 6.96% of customers) |
+| Repeat purchase rate | 3.12% |
+| High-risk revenue at stake | R$1.03M |
+| Low-risk vs. high-risk review rating | 1.23x higher |
+| Churn model ROC-AUC | 0.65 |
 
-### 📈 Customer Segmentation
-- **6 Customer Segments**: Champions, Loyal Customers, Potential Loyalists, Need Attention, At Risk, Lost Customers
-- **RFM Analysis**: Data-driven segmentation based on Recency, Frequency, and Monetary value
-- **Actionable Insights**: Tailored strategies for each segment
+**The dataset's own structure shapes the story:** 97% of customers place exactly one order. This means "churn" here is largely a recency signal rather than a repeat-purchase behavior pattern — the churn model reflects that honestly (ROC-AUC 0.65, not an inflated accuracy number) rather than overclaiming predictive power the data doesn't support.
 
-### 🔮 Churn Prediction
-- **ML-Powered Models**: Logistic Regression, Random Forest, Gradient Boosting
-- **Risk Scoring**: Identify at-risk customers before they leave
-- **Feature Engineering**: 25+ engineered features for accurate predictions
+## Data Correctness
 
-### 📊 Business Analytics
-- **Key Metrics**: 99K+ total customers, 12K champion customers, 48% revenue contribution
-- **Interactive Dashboard**: Real-time Power BI visualizations
-- **ROI Insights**: Revenue opportunity analysis and retention metrics
+This project went through a full audit and rebuild after the original pipeline produced numbers that didn't hold up under verification. Three bugs were significant enough to change every downstream metric:
 
-### 🛠 Technical Stack
-- **Data Processing**: Python, Pandas, NumPy
-- **Machine Learning**: Scikit-learn, XGBoost
-- **Database**: PostgreSQL with SQL optimization
-- **Visualization**: Power BI, HTML/CSS
-- **Analytics**: RFM segmentation algorithms, statistical analysis
+1. **Wrong customer identity.** Olist's `customer_id` is a per-order surrogate key — every order gets a unique one, so grouping by it makes every customer look like a one-time buyer by construction. The real identity is `customer_unique_id`. This alone changed customer counts from 99,441 to 96,096 and made repeat-purchase rate calculable at all (previously showed 0%).
+2. **Order-value aggregation bug.** Revenue/order-value stats were computed on `order_items` rows without first aggregating to one row per order. ~10% of orders have multiple items, so multi-item orders were being double- or triple-counted in average order value.
+3. **Merge fan-out in churn features.** `order_items` and `payments` were joined onto `orders` independently via separate `order_id` merges — for an order with 2 items and a 2-installment payment, this silently produced a 4-row cartesian blow-up, inflating monetary features for exactly those customers.
 
----
+Each fix was verified against the raw CSVs directly (`inspect_data.py`) before being applied to the pipeline, not just assumed correct from code review.
 
-## 📦 Dataset
+## Architecture
 
-**Olist Brazilian E-Commerce Dataset** - Public marketplace data from 2016-2018
-- **100,000+** orders
-- **32,000+** products
-- **99,000+** unique customers
-- **50+ features** across multiple dimensions (customers, orders, products, reviews, payments)
-- **Geolocation data** for Brazilian cities
-
----
-
-## 🚀 Quick Start
-
-### Prerequisites
-- Python 3.8 or higher
-- PostgreSQL 12 or higher
-- Virtual environment tool (venv or conda)
-
-### Installation
-
-1. **Clone the repository**
-```bash
-git clone https://github.com/ArnavModi-MSIT/-Customer-Segmentation-Dashboard-.git
-cd Customer-Segmentation-Dashboard
+```
+CSV files → PostgreSQL (ingestion) → EDA → RFM segmentation
+                                         → Churn feature engineering → XGBoost → risk scoring
+                                         → Business insights / ROI
+                                                    ↓
+                                    PostgreSQL (results tables) → Power BI
 ```
 
-2. **Create and activate virtual environment**
-```bash
-python -m venv venv
-# On Windows
-venv\Scripts\activate
-# On macOS/Linux
-source venv/bin/activate
+## Tech Stack
+
+Python · Pandas · Scikit-learn · XGBoost · PostgreSQL · SQLAlchemy · Power BI
+
+## Project Structure
+
+```
+├── config.py                  # env-based config
+├── run_pipeline.py            # single entrypoint, runs all stages in order
+├── inspect_data.py            # raw CSV schema/quality checker (run before ingestion)
+├── src/
+│   ├── db.py                  # shared Postgres engine
+│   ├── ingestion.py           # raw CSVs → Postgres, product category cleanup
+│   ├── eda.py                 # revenue/order/customer/review metrics
+│   ├── rfm.py                 # RFM scoring + 7-segment classification
+│   ├── churn_features.py      # customer-level churn feature engineering
+│   ├── churn_model.py         # XGBoost training + risk scoring
+│   ├── churn_writeback.py     # predictions → Postgres
+│   └── business_insights.py   # ROI scenarios, risk-segment analysis
+├── scripts/
+│   ├── index.html             # project landing page
+│   └── style.css
+├── dashboards/
+│   └── analytics.pbix
+└── outputs/                   # generated CSVs (committed for visibility)
 ```
 
-3. **Install dependencies**
+## Running It
+
 ```bash
 pip install -r requirements.txt
+# create .env with DB_USER, DB_PASS, DB_HOST, DB_PORT, DB_NAME
+python inspect_data.py         # verify raw data before touching the DB
+python run_pipeline.py         # ingestion → EDA → RFM → churn → insights
 ```
 
-4. **Configure PostgreSQL**
-```bash
-# Update database credentials in import_data_to_postgresql.py
-# Default: localhost, port 5432, database: olist_db
-```
-
-### 📊 Running the Analysis Pipeline
-
-```bash
-# Step 1: Import data to PostgreSQL
-python import_data_to_postgresql.py
-
-# Step 2: Process churn data
-python churn_data.py
-
-# Step 3: Train churn prediction models
-python churn_ml.py
-
-# Step 4: Generate RFM segments
-python rfm_analysis_and_segmentation.py
-
-# Step 5: Calculate business ROI insights
-python business_insights_roi.py
-
-# Step 6: Exploratory Data Analysis
-python exploratory_data_analysis.py
-```
-
-### 📈 Viewing Results
-
-- **Web Dashboard**: Open `index.html` in your browser
-  ```bash
-  # On Windows
-  start index.html
-  # On macOS
-  open index.html
-  # On Linux
-  xdg-open index.html
-  ```
-
-- **Power BI Dashboard**: Open `analytics.pbix` in Microsoft Power BI Desktop
-- **CSV Results**: Check generated CSV files for detailed segment and prediction data
-
----
-
-## 🔍 Key Results & Insights
-
-### Customer Segments
-| Segment | Count | %Total | Avg Value | Strategy |
-|---------|-------|--------|-----------|----------|
-| Champions | 12,000 | 12% | High | Nurture & Retention |
-| Loyal Customers | 15,000 | 15% | Medium-High | Engagement Programs |
-| Potential Loyalists | 18,000 | 18% | Medium | Convert to Loyal |
-| Need Attention | 25,000 | 25% | Low-Medium | Reactivation |
-| At Risk | 18,000 | 18% | Low | Win-back Campaigns |
-| Lost Customers | 11,000 | 12% | Very Low | Not Profitable |
-
-### Performance Metrics
-- **Churn Prediction Accuracy**: ~85-90% (varies by model)
-- **Revenue Concentration**: Top 12% of customers = 48% of revenue
-- **Retention Opportunity**: 31% of customers need engagement
-- **At-Risk Customers**: 18% requiring immediate attention
-
----
-
-## 🛠 Technologies Used
-
-### Data Processing & ML
-- **Pandas** (1.3+) - Data manipulation and analysis
-- **NumPy** (1.20+) - Numerical computing
-- **Scikit-learn** (0.24+) - Machine learning models
-- **XGBoost** (1.3+) - Gradient boosting
-
-### Database & SQL
-- **PostgreSQL** (12+) - Relational database
-- **psycopg2** (2.8+) - PostgreSQL adapter for Python
-
-### Visualization & BI
-- **Power BI** - Interactive business dashboards
-- **Matplotlib** (3.3+) - Statistical plots
-- **Seaborn** (0.11+) - Visualization library
-
-### Web & Frontend
-- **HTML5** - Semantic markup
-- **CSS3** - Modern styling with gradients & animations
-- **Responsive Design** - Mobile-first approach
-
----
-
-## 📚 Usage Examples
-
-### Run specific analysis
-```bash
-# Only RFM analysis
-python rfm_analysis_and_segmentation.py
-
-# Only churn predictions
-python churn_ml.py
-
-# Only ROI calculations
-python business_insights_roi.py
-```
-
-### Database queries
-```bash
-# Connect to PostgreSQL and explore data
-psql -U postgres -d olist_db
-
-# Example query: Top 10 products by revenue
-SELECT * FROM order_items ORDER BY price DESC LIMIT 10;
-```
-
-### Export results
-CSV files are automatically generated in the project root:
-- `customer_churn_predictions.csv` - Churn predictions for all customers
-- `rfm_analysis_results.csv` - Detailed RFM analysis
-- `segment_summary.csv` - Segment summaries and metrics
-
----
-
-## 🔐 Security & Best Practices
-
-- **Never commit** sensitive files (database credentials, passwords)
-- **Use environment variables** for configuration (see `.env.example`)
-- **Database access** requires local PostgreSQL setup
-- **Git history** contains project evolution and commits
-- **Code is production-ready** with error handling and logging
-
----
-
-## 📈 Model Details
-
-### Churn Prediction Models
-1. **Logistic Regression** - Baseline model for interpretability
-2. **Random Forest** - Ensemble method with feature importance
-3. **Gradient Boosting (XGBoost)** - Advanced model for accuracy
-
-### Features Engineering
-- **Recency**: Days since last purchase
-- **Frequency**: Total number of purchases
-- **Monetary**: Total spending amount
-- **Time-series features**: Purchase trends, seasonality
-- **Customer lifecycle**: Account age, status
-- **Behavioral indicators**: Product categories, order patterns
-
----
-
-## 📊 Methodology
-
-### RFM Segmentation Process
-1. **Calculate RFM Scores**: Quintile-based scoring (1-5) for each metric
-2. **Segment Mapping**: Combine scores to create 6 segments
-3. **Business Rules**: Apply domain knowledge for segment names
-4. **Actionable Insights**: Develop strategies for each segment
-
-### ML Pipeline
-1. **Data Preparation**: Cleaning, encoding, scaling
-2. **Feature Engineering**: Creating predictive features
-3. **Train/Test Split**: 80/20 cross-validation
-4. **Model Training**: Hyperparameter tuning with GridSearch
-5. **Evaluation**: Accuracy, precision, recall, F1-score
-6. **Prediction**: Score all customers for churn risk
-
----
-
-## 📝 License
-
-This project is licensed under the **MIT License**
-
----
-
-## 👤 Author & Contact
-
-**Arnav Modi**
-- GitHub: [@ArnavModi-MSIT](https://github.com/ArnavModi-MSIT)
-- Project: [Customer Segmentation Dashboard](https://arnavmodi-msit.github.io/Customer-Segmentation-Dashboard/)
+Each stage can also be run independently for debugging, e.g. `python src/eda.py`.
