@@ -1,7 +1,4 @@
-"""
-Reads the raw Olist CSVs and builds clean, joined tables ready for RFM
-scoring and Power BI import. Pure pandas — no database.
-"""
+"""Reads raw Olist CSVs and builds clean, joined tables for RFM scoring and Power BI. Pure pandas — no database."""
 import os
 import pandas as pd
 
@@ -34,14 +31,7 @@ def load_raw_tables(verbose=True):
 
 
 def load_products_with_translation(verbose=True):
-    """
-    Cleans and enriches the products table:
-      - rows with missing category/name/description metadata are KEPT
-        (not dropped) and tagged category='unknown' — dropping them would
-        silently orphan any order_items referencing those product_ids.
-      - joins product_category_name_translation for English category names,
-        used throughout EDA/RFM/Power BI instead of Portuguese labels.
-    """
+    """Fills missing categories as 'unknown' (dropping rows would orphan order_items) and joins English category names."""
     products = pd.read_csv(os.path.join(RAW_DIR, PRODUCTS_FILE), low_memory=False)
     translation = pd.read_csv(os.path.join(RAW_DIR, TRANSLATION_FILE))
 
@@ -65,12 +55,7 @@ def build_fact_order_items(order_items):
 
 
 def build_fact_orders(orders, dim_customers, fact_order_items, reviews, verbose=True):
-    """
-    One row per order: order-level total value (summed across items — an
-    item-level average would understate value for multi-item orders),
-    joined to true customer identity (customer_unique_id, not the per-order
-    customer_id) and average review score.
-    """
+    """One row per order, with item totals summed (not averaged) and true customer identity attached."""
     order_totals = fact_order_items.groupby("order_id")["total_value"].sum().reset_index()
 
     before = orders["order_id"].nunique()

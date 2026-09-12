@@ -1,9 +1,4 @@
-"""
-Business insights derived directly from RFM segmentation — no ML, no
-probability scores. Every number here is a sum, count, or percentage
-computed from segment_summary / rfm, so it's fully explainable to a
-non-technical stakeholder.
-"""
+"""Business insights derived directly from RFM segmentation — no ML, just sums and percentages."""
 from datetime import datetime
 
 
@@ -17,10 +12,7 @@ def revenue_concentration(segment_summary):
 
 
 def at_risk_revenue(rfm):
-    """
-    'At risk' here means the RFM segments that already signal declining
-    engagement (At Risk, Need Attention, Lost) — not a model's prediction.
-    """
+    """'At risk' = the At Risk, Need Attention, and Lost segments — not a model's prediction."""
     at_risk_segments = ["At Risk", "Need Attention", "Lost"]
     at_risk = rfm[rfm["Segment"].isin(at_risk_segments)]
     total_revenue = rfm["monetary"].sum()
@@ -33,10 +25,7 @@ def at_risk_revenue(rfm):
 
 
 def retention_roi_scenarios(rfm, retention_rates=(10, 20, 30)):
-    """
-    Transparent ROI framing: if we re-engaged X% of the 'At Risk' segment
-    back to their historical spend level, what's the revenue impact?
-    """
+    """Revenue impact of re-engaging X% of the 'At Risk' segment back to their historical spend."""
     at_risk = rfm[rfm["Segment"] == "At Risk"]
     at_risk_revenue_total = at_risk["monetary"].sum()
     total_revenue = rfm["monetary"].sum()

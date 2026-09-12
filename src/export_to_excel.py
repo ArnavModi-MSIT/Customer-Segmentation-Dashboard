@@ -1,8 +1,4 @@
-"""
-Writes every processed table to one multi-sheet Excel workbook — the
-single file Power BI (or Excel itself) reads from. No database involved:
-this file *is* the data warehouse for this project.
-"""
+"""Writes every processed table to one multi-sheet Excel workbook — the file Power BI reads from."""
 import os
 import pandas as pd
 

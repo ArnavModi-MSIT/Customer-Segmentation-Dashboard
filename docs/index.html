@@ -26,7 +26,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
   <!-- CSS -->
-  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="style.css?v=2" />
 
 </head>
 
@@ -41,7 +41,7 @@
       </div>
       <ul class="nav-menu">
         <li><a href="#overview" class="nav-link">Overview</a></li>
-        <li><a href="#insights" class="nav-link">Insights</a></li>
+        <li><a href="#architecture" class="nav-link">Architecture</a></li>
         <li><a href="#dashboard" class="nav-link">Dashboard</a></li>
         <li><a href="https://github.com/ArnavModi-MSIT/-Customer-Segmentation-Dashboard-" target="_blank" class="nav-link">GitHub</a></li>
       </ul>
@@ -65,9 +65,8 @@
 
       <p>
         A no-database, no-ML analytics pipeline: raw CSVs cleaned and RFM-scored
-        with Python and pandas, exported to a single Excel workbook, and
-        visualized in an interactive Power BI dashboard across 96K+ customers
-        from the Olist Brazilian E-Commerce Dataset.
+        with Python, exported to Excel, and visualized in an interactive Power BI
+        dashboard across 96K+ customers from the Olist Brazilian E-Commerce Dataset.
       </p>
 
       <div class="hero-buttons">
@@ -124,14 +123,11 @@
       <h2>🎯 Project Overview</h2>
 
       <p>
-        This project analyzes customer purchasing behavior using Recency,
-        Frequency, and Monetary (RFM) analysis &mdash; a rule-based scoring
-        technique, not machine learning. Customers are segmented into seven
-        groups to support targeted retention and engagement strategies. All
-        metrics are computed on the true customer identity
-        (<code>customer_unique_id</code>), not the per-order key the raw
-        dataset exposes by default &mdash; a distinction that materially
-        changes every downstream number.
+        Recency, Frequency, and Monetary (RFM) analysis &mdash; rule-based
+        scoring, not machine learning &mdash; segments customers into 7 groups
+        for targeted retention. Every metric runs on the true customer identity
+        (<code>customer_unique_id</code>), not the per-order key the raw data
+        exposes by default.
       </p>
 
       <div class="segments-list">
@@ -149,30 +145,66 @@
 
     </div>
 
-    <div class="card">
+  </section>
 
-      <h2>🛠 Tech Stack</h2>
+  <!-- ARCHITECTURE / PIPELINE -->
 
-      <p>
-        A Python/pandas pipeline that reads raw CSVs and writes a single
-        Excel workbook &mdash; no database, no credentials &mdash; with all
-        business metrics served through Power BI.
+  <section class="architecture" id="architecture">
+
+    <div class="section-title">
+
+      <span>Technical Approach</span>
+
+      <h2>Architecture & Tech Stack</h2>
+
+      <p class="section-subtitle">
+        How raw data becomes a boardroom-ready dashboard &mdash; no database,
+        no ML, four tools end to end.
       </p>
 
-      <div class="tech-grid">
+    </div>
 
-        <span class="tech-badge">Python</span>
-        <span class="tech-badge">Pandas</span>
-        <span class="tech-badge">openpyxl</span>
-        <span class="tech-badge">Excel</span>
-        <span class="tech-badge">Power BI</span>
-        <span class="tech-badge">DAX</span>
+    <div class="pipeline">
 
+      <div class="pipeline-stage">
+        <div class="stage-icon">📄</div>
+        <h3>Raw Data</h3>
+        <p>9 CSVs &mdash; orders, customers, products, reviews, payments, geolocation</p>
+        <div class="stage-tech"><span class="stage-badge">CSV</span></div>
       </div>
 
-      <p style="margin-top: 20px; font-size: 14px; color: #666;">
-        <strong>Dataset:</strong> Olist Brazilian E-Commerce (99K+ orders, 96K+ unique customers, 33K+ products)
-      </p>
+      <div class="pipeline-arrow">→</div>
+
+      <div class="pipeline-stage">
+        <div class="stage-icon">🐍</div>
+        <h3>Python + pandas</h3>
+        <p>Clean, join, and RFM-score every table &mdash; rule-based, not ML</p>
+        <div class="stage-tech">
+          <span class="stage-badge">Python</span>
+          <span class="stage-badge">pandas</span>
+        </div>
+      </div>
+
+      <div class="pipeline-arrow">→</div>
+
+      <div class="pipeline-stage">
+        <div class="stage-icon">📊</div>
+        <h3>Excel Workbook</h3>
+        <p>One multi-sheet file &mdash; stands in for a data warehouse</p>
+        <div class="stage-tech"><span class="stage-badge">openpyxl</span></div>
+      </div>
+
+      <div class="pipeline-arrow">→</div>
+
+      <div class="pipeline-stage">
+        <div class="stage-icon">📈</div>
+        <h3>Power BI</h3>
+        <p>Relationships, DAX measures, a 4-page interactive dashboard</p>
+        <div class="stage-tech">
+          <span class="stage-badge">Power BI</span>
+          <span class="stage-badge">DAX</span>
+        </div>
+      </div>
 
     </div>
 
@@ -209,21 +241,6 @@
 
       <div class="insight-card">
 
-        <div class="icon">🎯</div>
-
-        <h3>Segmentation Reality Check</h3>
-
-        <p>
-          "Need Attention" is the largest segment at ~40% of customers &mdash;
-          a direct consequence of a 3.05% repeat-purchase rate in this
-          dataset. Most customers are one-time buyers, which shapes every
-          retention strategy built on top of this data.
-        </p>
-
-      </div>
-
-      <div class="insight-card">
-
         <div class="icon">💰</div>
 
         <h3>Revenue at Risk</h3>
@@ -233,36 +250,6 @@
           in the At Risk, Need Attention, or Lost segments. No prediction
           model involved: this is their own historical spend, grouped by
           how recently and how often they've bought.
-        </p>
-
-      </div>
-
-      <div class="insight-card">
-
-        <div class="icon">📊</div>
-
-        <h3>Data-Driven Segmentation</h3>
-
-        <p>
-          RFM scoring on the correct customer identity provides a
-          quantifiable, reproducible basis for customer valuation,
-          replacing per-order artifacts with genuine customer-level metrics
-          &mdash; recomputed from a plain Excel workbook, no database
-          required.
-        </p>
-
-      </div>
-
-      <div class="insight-card">
-
-        <div class="icon">🛒</div>
-
-        <h3>Product & Category Mix</h3>
-
-        <p>
-          Health &amp; beauty, watches &amp; gifts, and bed/bath/table lead
-          category revenue &mdash; the product-performance page breaks down
-          exactly which categories are carrying the business.
         </p>
 
       </div>
@@ -280,60 +267,6 @@
           an ML probability score.
         </p>
 
-      </div>
-
-    </div>
-
-  </section>
-
-  <!-- METHODOLOGY -->
-
-  <section class="methodology">
-
-    <div class="section-title">
-
-      <span>Technical Approach</span>
-
-      <h2>Methodology & Implementation</h2>
-
-    </div>
-
-    <div class="methodology-grid">
-
-      <div class="method-card">
-        <div class="method-number">01</div>
-        <h3>Prepare Data</h3>
-        <p>Raw Olist CSVs read directly with pandas &mdash; no database &mdash; with product category nulls cleaned and English category names joined in.</p>
-      </div>
-
-      <div class="method-card">
-        <div class="method-number">02</div>
-        <h3>EDA</h3>
-        <p>Revenue, order, customer, and review metrics computed on order-level (not item-level) aggregates for correctness.</p>
-      </div>
-
-      <div class="method-card">
-        <div class="method-number">03</div>
-        <h3>RFM Segmentation</h3>
-        <p>Recency, Frequency, and Monetary scores computed on true customer identity &mdash; rule-based quantile scoring, mapping customers to 7 segments.</p>
-      </div>
-
-      <div class="method-card">
-        <div class="method-number">04</div>
-        <h3>Business Insights</h3>
-        <p>Revenue concentration, at-risk revenue, and retention ROI scenarios computed directly from the RFM segments &mdash; every number traceable to a sum or a percentage.</p>
-      </div>
-
-      <div class="method-card">
-        <div class="method-number">05</div>
-        <h3>Excel Export</h3>
-        <p>Every table written to one multi-sheet Excel workbook &mdash; the single file that stands in for a data warehouse in this project.</p>
-      </div>
-
-      <div class="method-card">
-        <div class="method-number">06</div>
-        <h3>Visualization</h3>
-        <p>The Excel workbook is read directly by Power BI, with relationships and DAX measures built on top, served through an interactive dashboard across 4 pages.</p>
       </div>
 
     </div>
@@ -362,7 +295,7 @@
       title="Customer Segmentation Dashboard"
       width="100%"
       height="750"
-      src="https://app.powerbi.com/view?r=eyJrIjoiYTcwMGYxZDItM2NlYy00Njg0LTk0MGItY2RmNTNiNGU4NTQ1IiwidCI6IjNiMjk5M2Q3LTQ5YmYtNGYyOS1iNzk0LWRkNTcyN2Y0NWVlMiJ9"
+      src="https://app.powerbi.com/view?r=eyJrIjoiYjhiYzg2NWEtMjBkMi00Yjk5LTk4MDMtOTRkNGQ3ZjY3OGE0IiwidCI6IjNiMjk5M2Q3LTQ5YmYtNGYyOS1iNzk0LWRkNTcyN2Y0NWVlMiJ9"
       frameborder="0"
       allowFullScreen="true">
     </iframe>
@@ -380,7 +313,7 @@
       <h2>Ready to Explore?</h2>
 
       <p>
-        Dive into the complete analysis with code, documentation, and detailed insights available on GitHub.
+        Full code, the Power BI build guide, and detailed docs are on GitHub.
       </p>
 
       <div class="cta-buttons">
@@ -414,7 +347,7 @@
         <h4>Quick Links</h4>
         <ul>
           <li><a href="#overview">Overview</a></li>
-          <li><a href="#insights">Insights</a></li>
+          <li><a href="#architecture">Architecture</a></li>
           <li><a href="#dashboard">Dashboard</a></li>
           <li><a href="https://github.com/ArnavModi-MSIT/-Customer-Segmentation-Dashboard-" target="_blank">GitHub</a></li>
         </ul>

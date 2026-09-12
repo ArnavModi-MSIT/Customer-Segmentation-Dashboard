@@ -1,12 +1,4 @@
-"""
-Runs the full pipeline end to end:
-  prepare_data -> eda -> rfm -> business_insights -> export_to_excel
-
-No database, no ML — pure pandas analytics, ending in one Excel workbook
-(data/processed/olist_analytics.xlsx) that Power BI reads directly.
-
-Each stage can also be run independently, e.g. `python src/eda.py`.
-"""
+"""Runs prepare_data -> eda -> rfm -> business_insights -> export_to_excel. No database, no ML."""
 import os
 import sys
 
@@ -16,7 +8,7 @@ if sys.stdout.encoding.lower() != "utf-8":
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "src"))
 
 from prepare_data import run_prepare_data
-from eda import run_eda
+from eda import run_eda, compute_top_products
 from rfm import run_rfm
 from business_insights import run_business_insights
 from export_to_excel import export_to_excel
@@ -36,6 +28,9 @@ def main(verbose=True):
     print("# STAGE 2/4: EDA")
     print("#" * 80)
     run_eda(tables, verbose=verbose)
+    tables["top_products"] = compute_top_products(tables["fact_order_items"], tables["dim_products"], tables["fact_orders"])
+    if verbose:
+        print(f"  top_products: {len(tables['top_products'])} rows (pre-ranked, ready for Power BI)")
 
     print("\n" + "#" * 80)
     print("# STAGE 3/4: RFM SEGMENTATION")

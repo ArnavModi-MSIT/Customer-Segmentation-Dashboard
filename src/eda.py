@@ -1,7 +1,4 @@
-"""
-Descriptive analytics: revenue, order, customer, review, and category
-metrics. Pure pandas aggregation — no modeling.
-"""
+"""Descriptive analytics: revenue, order, customer, review, and category metrics — pure aggregation, no modeling."""
 import pandas as pd
 from datetime import datetime
 import warnings
@@ -34,12 +31,7 @@ def compute_order_metrics(fact_orders, fact_order_items):
 
 
 def compute_customer_metrics(dim_customers, fact_orders):
-    """
-    Olist's customer_id is a per-order surrogate key — every order gets a
-    unique customer_id, so grouping by it makes every customer look like a
-    one-time buyer. customer_unique_id is the actual persistent customer
-    identity and must be used for repeat-purchase / frequency metrics.
-    """
+    """Uses customer_unique_id, not the per-order customer_id, for repeat-purchase metrics."""
     repeat_customers = fact_orders.groupby("customer_unique_id").size()
     repeat_rate = (
         len(repeat_customers[repeat_customers > 1]) / dim_customers["customer_unique_id"].nunique()
@@ -79,6 +71,27 @@ def compute_category_metrics(fact_order_items, dim_products, top_n=10):
         .head(top_n)
     )
     return top_categories.round(2).to_dict()
+
+
+def compute_top_products(fact_order_items, dim_products, fact_orders, top_n=20):
+    """Pre-ranked so Power BI doesn't have to rank ~33K products live in DAX. Delivered orders only."""
+    delivered_order_ids = fact_orders.loc[fact_orders["order_status"] == "delivered", "order_id"]
+    delivered_items = fact_order_items[fact_order_items["order_id"].isin(delivered_order_ids)]
+
+    merged = delivered_items.merge(
+        dim_products[["product_id", "product_category_name_english"]], on="product_id", how="left"
+    )
+    merged["product_category_name_english"] = merged["product_category_name_english"].fillna("unknown")
+
+    return (
+        merged.groupby(["product_id", "product_category_name_english"])["price"]
+        .sum()
+        .reset_index()
+        .rename(columns={"price": "total_revenue"})
+        .sort_values("total_revenue", ascending=False)
+        .head(top_n)
+        .reset_index(drop=True)
+    )
 
 
 def data_quality_checks(dim_customers, fact_orders, fact_order_items, reviews):

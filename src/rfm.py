@@ -1,10 +1,4 @@
-"""
-RFM (Recency, Frequency, Monetary) customer segmentation.
-
-Pure rule-based scoring — quantile buckets + threshold rules, no machine
-learning. Same logic as the original Postgres-backed version; only the
-input changed from a SQL query to an in-memory DataFrame.
-"""
+"""RFM (Recency, Frequency, Monetary) customer segmentation — rule-based quantile scoring, no ML."""
 import pandas as pd
 from datetime import timedelta
 import warnings
@@ -13,11 +7,7 @@ warnings.filterwarnings("ignore")
 
 
 def calculate_rfm(fact_orders):
-    """
-    fact_orders: one row per order (see prepare_data.build_fact_orders),
-    with customer_unique_id, order_purchase_timestamp, total_value, and
-    review_score already attached. Only 'delivered' orders count toward RFM.
-    """
+    """Only 'delivered' orders count toward RFM."""
     delivered = fact_orders[fact_orders["order_status"] == "delivered"].copy()
     analysis_date = delivered["order_purchase_timestamp"].max() + timedelta(days=1)
 
